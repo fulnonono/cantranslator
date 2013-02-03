@@ -10,8 +10,8 @@ in `sample.json
 JSON Format
 ============
 
-The JSON object is a list of CAN buses (the ``0x102`` is a unique bus address
-and means it will use the "CAN2" module in the microcontroller, and whatever
+The JSON object is a list of CAN buses (the ``0x101`` is a unique bus address
+and means it will use the "CAN1" module in the microcontroller and whatever
 associated pins on the board), messages in each bus and a list of signals within
 each message.
 
@@ -19,7 +19,7 @@ CAN Bus
 -------
 
 The attributes of the CAN bus object (identified with the bus address in
-hex, e.g. ``0x102``):
+hex, i.e. only ``0x101`` and ``0x102`` are allowed):
 
 ``speed`` - The CAN bus speed in Kbps.
 
@@ -289,6 +289,10 @@ mapping file is ``mapping.json``, run the script:
 
     $ ./xml_to_json.py signals.xml mapping.json signals.json
 
-The script merges the two files, filling in the details of the CAN messages (bit
-position, bit size, offset, etc) in the JSON. The script creates the file
-``signals.json`` which will work as input to the code generation script.
+The script scans ``mapping.json`` to identify the CAN messages and
+signals that you want to use from the XML file. It pulls the neccessary details
+of the messages (bit position, bit size, offset, etc) and outputs the resulting
+subset as JSON into the output file, ``signals.json``.
+
+The resulting file together with ``mapping.json`` will work as input to the code
+generation script.

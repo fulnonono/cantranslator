@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Flashing a Pre-compiled Binary &mdash; OpenXC CAN Translator 2.1.1 documentation</title>
+    <title>Flashing a Pre-compiled Binary &mdash; OpenXC CAN Translator 2.1.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.1.1',
+        VERSION:     '2.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="OpenXC CAN Translator 2.1.1 documentation" href="../index.html" />
+    <link rel="top" title="OpenXC CAN Translator 2.1.2 documentation" href="../index.html" />
     <link rel="next" title="Building from Source" href="compiling.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -59,13 +59,131 @@ not wish to make the CAN signals public. If that&#8217;s the case for your
 vehicle, you will have a <tt class="docutils literal"><span class="pre">.hex</span></tt> file and can use the
 <a class="reference external" href="https://github.com/openxc/cantranslator/blob/master/script/upload_hex.sh">upload_hex.sh</a>
 script to update your device.</p>
-<div class="section" id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>In order to flash a CAN translator, you need:</p>
+<div class="section" id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Install <a class="reference external" href="http://www.cygwin.com">Cygwin</a> and in the installer, select the
+following packages:</li>
+</ol>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">git,</span> <span class="pre">curl,</span> <span class="pre">libsasl2,</span> <span class="pre">ca-certificates</span></tt></div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Start a Cygwin Terminal.</li>
+<li>Configure the terminal to ignore Windows-style line endings in scripts:</li>
+</ol>
+<blockquote>
+<div><div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;set -o igncr &amp;&amp; export SHELLOPTS&quot;</span> &gt;&gt; ~/.bashrc <span class="o">&amp;&amp;</span> <span class="nb">source</span> ~/.bashrc
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Continue to the <a class="reference internal" href="installation.html#all-platforms"><em>all platforms</em></a> section.</li>
+</ol>
+</div>
+<div class="section" id="os-x">
+<h3>OS X<a class="headerlink" href="#os-x" title="Permalink to this headline">¶</a></h3>
+<p>If you already have Git installed, you can skip ahead to the <a class="reference internal" href="installation.html#all-platforms"><em>all platforms</em></a> section</p>
+<ol class="arabic simple">
+<li>Open the Terminal app.</li>
+<li>Install <a class="reference external" href="http://mxcl.github.com/homebrew/">Homebrew</a>:
+<tt class="docutils literal"><span class="pre">ruby</span> <span class="pre">-e</span> <span class="pre">&quot;$(curl</span> <span class="pre">-fsSkL</span> <span class="pre">raw.github.com/mxcl/homebrew/go)&quot;</span></tt></li>
+<li>Install Git with Homebrew (<tt class="docutils literal"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">git</span></tt>).</li>
+<li>Continue to the <a class="reference internal" href="installation.html#all-platforms"><em>all platforms</em></a> section.</li>
+</ol>
+</div>
+<div class="section" id="linux">
+<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Install Git from your distribution&#8217;s package manager.</p>
+<p>Ubuntu:</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install git
+</pre></div>
+</div>
+<p>Arch Linux:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pacman -S git
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Continue to the <a class="reference internal" href="installation.html#all-platforms"><em>all platforms</em></a> section.</li>
+</ol>
+</div>
+<div class="section" id="all-platforms">
+<span id="id1"></span><h3>All Platforms<a class="headerlink" href="#all-platforms" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>If your network uses an Internet proxy (e.g. a corporate network) set the
+<tt class="docutils literal"><span class="pre">http_proxy</span></tt> and <tt class="docutils literal"><span class="pre">https_proxy</span></tt> environment variables:</li>
+</ol>
+<blockquote>
+<div><div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">export </span><span class="nv">http_proxy</span><span class="o">=</span>&lt;your proxy&gt;
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">https_proxy</span><span class="o">=</span>&lt;your proxy&gt;
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Clone the <a class="reference external" href="https://github.com/openxc/cantranslator">cantranslator</a>
+repository:</li>
+</ol>
+<blockquote>
+<div><div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>git clone https://github.com/openxc/cantranslator
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="flashing">
+<h2>Flashing<a class="headerlink" href="#flashing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="usb-cable">
+<h3>USB Cable<a class="headerlink" href="#usb-cable" title="Permalink to this headline">¶</a></h3>
+<p>You need to have the <strong>mini-USB</strong> port on the chipKIT connected to your computer
+to upload a new firmware. This is different than the micro-USB port that you use
+to read vehicle data - see the <a class="reference external" href="http://openxcplatform.com/vehicle-interface/index.html#connections">device connections</a> section
+of the <a class="reference external" href="http://openxcplatform.com">OpenXC website</a> to make sure you have the correct cable attached.</p>
+</div>
+<div class="section" id="uploading-script">
+<h3>Uploading Script<a class="headerlink" href="#uploading-script" title="Permalink to this headline">¶</a></h3>
+<p>Open a terminal and <tt class="docutils literal"><span class="pre">cd</span></tt> into the <tt class="docutils literal"><span class="pre">cantranslator</span></tt> folder that you cloned
+with Git. Run the <tt class="docutils literal"><span class="pre">upload_hex.sh</span></tt> script with the <tt class="docutils literal"><span class="pre">.hex</span></tt> file you
+downloaded:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>script/upload_hex.sh &lt;firmware file you downloaded&gt;.hex
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">upload_hex.sh</span></tt> script attempts to install all required dependencies
+automatically, and it is tested in Cygwin, OS X Mountain Lion, Ubuntu 12.04 and
+Arch Linux - other operating systems may need to <a class="reference internal" href="#manual-deps"><em>install the dependencies
+manually</em></a>.</p>
+<p>If you have more than one virtual serial (COM) port active, you may need to
+explicitly specify which port to use. Pass the port name as the second argument
+to the script, e.g. in Linux:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>script/upload_hex.sh &lt;firmware file you downloaded&gt;.hex /dev/ttyUSB2
+</pre></div>
+</div>
+<p>and in Windows, e.g. if you needed to use <tt class="docutils literal"><span class="pre">com4</span></tt> instead of the default
+<tt class="docutils literal"><span class="pre">com3</span></tt>:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>script/upload_hex.sh &lt;firmware file you downloaded&gt;.hex com4
+</pre></div>
+</div>
+<p><strong>Windows notes:</strong></p>
+<p>In Windows, this command will only work in Cygwin, not the standard
+<tt class="docutils literal"><span class="pre">cmd.exe</span></tt> or Powershell.</p>
+<p>If you get errors about <tt class="docutils literal"><span class="pre">$'\r':</span> <span class="pre">command</span> <span class="pre">not</span> <span class="pre">found</span></tt> then your Git configuration
+added Windows-style <tt class="docutils literal"><span class="pre">CRLF</span></tt> line endings. Run this first to ignore the <tt class="docutils literal"><span class="pre">CR</span></tt>:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">set</span> -o igncr <span class="o">&amp;&amp;</span> <span class="nb">export </span>SHELLOPTS
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dependencies">
+<span id="manual-deps"></span><h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>If the bootstrap script failed, you will need to install the dependencies manually. You will need:</p>
 <ul class="simple">
-<li>AVR programmer</li>
+<li><tt class="docutils literal"><span class="pre">avrdude</span></tt></li>
 <li>FTDI Driver</li>
-<li>Mini-USB cable</li>
 </ul>
 <div class="section" id="ftdi-driver">
 <h3>FTDI Driver<a class="headerlink" href="#ftdi-driver" title="Permalink to this headline">¶</a></h3>
@@ -93,61 +211,14 @@ need it), you can install a programmer seprately:</p>
 <li><dl class="first docutils">
 <dt>Windows</dt>
 <dd><ul class="first last simple">
-<li>If you prefer a GUI, install <a class="reference external" href="http://winavr.sourceforge.net/">WinAVR</a></li>
-<li>If you prefer command line, install <a class="reference external" href="http://cygwin.com">Cygwin</a> and
-<a class="reference external" href="https://github.com/chipKIT32/chipKIT32-MAX/downloads">MPIDE</a>, and follow the <a class="reference internal" href="installation.html"><em>Installation</em></a> documentation to configure the MPIDE
-environment variables.</li>
+<li>Install <a class="reference external" href="http://cygwin.com">Cygwin</a> and <a class="reference external" href="https://github.com/chipKIT32/chipKIT32-MAX/downloads">MPIDE</a>, and follow the
+<a class="reference internal" href="installation.html"><em>Installation</em></a> documentation to configure the MPIDE environment
+variables.</li>
 </ul>
 </dd>
 </dl>
 </li>
 </ul>
-</div>
-<div class="section" id="usb-cable">
-<h3>USB Cable<a class="headerlink" href="#usb-cable" title="Permalink to this headline">¶</a></h3>
-<p>You need to have the <strong>mini-USB</strong> port on the chipKIT connected to your computer
-to upload a new firmware. This is different than the micro-USB port that you use
-to read vehicle data - see the <a class="reference external" href="http://openxcplatform.com/vehicle-interface/index.html#connections">device connections</a> section
-of the <a class="reference external" href="http://openxcplatform.com">OpenXC website</a> to make sure you have the correct cable attached.</p>
-</div>
-</div>
-<div class="section" id="flashing">
-<h2>Flashing<a class="headerlink" href="#flashing" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="command-line">
-<h3>Command Line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h3>
-<p>Once you have <tt class="docutils literal"><span class="pre">avrdude</span></tt> installed, run the <tt class="docutils literal"><span class="pre">upload_hex.sh</span></tt> script with the
-<tt class="docutils literal"><span class="pre">.hex</span></tt> file you downloaded (Windows users see below, this script will <em>not</em>
-work with the standard Windows command line or Powershell):</p>
-<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>script/upload_hex.sh &lt;the firmware file you downloaded&gt;.hex
-</pre></div>
-</div>
-<p>If you have more than one virtual serial (COM) port active, you may need to
-explicitly specific which port to use. Pass the port identified as the second
-argument to the script, e.g. in Linux:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>script/upload_hex.sh &lt;the firmware file you downloaded&gt;.hex /dev/ttyUSB2
-</pre></div>
-</div>
-<p>and in Windows, if you needed to use <tt class="docutils literal"><span class="pre">com4</span></tt> instead of the default <tt class="docutils literal"><span class="pre">com3</span></tt>:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>script/upload_hex.sh &lt;the firmware file you downloaded&gt;.hex com4
-</pre></div>
-</div>
-<p><strong>Windows notes:</strong></p>
-<p>In Windows, this command will only work in Cygwin, not the standard
-<tt class="docutils literal"><span class="pre">cmd.exe</span></tt> or Powershell. If you have the <tt class="docutils literal"><span class="pre">sh.exe</span></tt> program installed by
-some other means (e.g. you have Git Shell) then it will
-actually work in Powershell, but you need to preface the command with <tt class="docutils literal"><span class="pre">sh</span></tt>
-(i.e. <tt class="docutils literal"><span class="pre">sh</span> <span class="pre">script/upload_hex.sh</span> <span class="pre">...</span></tt>).</p>
-<p>If you get errors about <tt class="docutils literal"><span class="pre">$'\r':</span> <span class="pre">command</span> <span class="pre">not</span> <span class="pre">found</span></tt> then your Git
-configuration added <tt class="docutils literal"><span class="pre">CRLF</span></tt> line endings and so you must run the script
-like this:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">set</span> -o igncr <span class="o">&amp;&amp;</span> <span class="nb">export </span>SHELLOPTS <span class="o">&amp;&amp;</span> script/upload_hex.sh &lt;firmware you downloaded&gt;.hex
-</pre></div>
-</div>
-</div>
-<div class="section" id="winavr-gui">
-<h3>WinAVR GUI<a class="headerlink" href="#winavr-gui" title="Permalink to this headline">¶</a></h3>
-<p>The GUI should be straightforward, but additional documentation here would be a
-wonderful contribution!</p>
 </div>
 </div>
 </div>
@@ -161,15 +232,21 @@ wonderful contribution!</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Flashing a Pre-compiled Binary</a><ul>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
-<li><a class="reference internal" href="#ftdi-driver">FTDI Driver</a></li>
-<li><a class="reference internal" href="#avr-programmer">AVR Programmer</a></li>
-<li><a class="reference internal" href="#usb-cable">USB Cable</a></li>
+<li><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+<li><a class="reference internal" href="#os-x">OS X</a></li>
+<li><a class="reference internal" href="#linux">Linux</a></li>
+<li><a class="reference internal" href="#all-platforms">All Platforms</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#flashing">Flashing</a><ul>
-<li><a class="reference internal" href="#command-line">Command Line</a></li>
-<li><a class="reference internal" href="#winavr-gui">WinAVR GUI</a></li>
+<li><a class="reference internal" href="#usb-cable">USB Cable</a></li>
+<li><a class="reference internal" href="#uploading-script">Uploading Script</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a><ul>
+<li><a class="reference internal" href="#ftdi-driver">FTDI Driver</a></li>
+<li><a class="reference internal" href="#avr-programmer">AVR Programmer</a></li>
 </ul>
 </li>
 </ul>
@@ -216,7 +293,7 @@ wonderful contribution!</p>
         <li class="right" >
           <a href="installation.html" title="Installation"
              >previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

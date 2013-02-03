@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>JSON Mapping Format &mdash; OpenXC CAN Translator 2.1.1 documentation</title>
+    <title>JSON Mapping Format &mdash; OpenXC CAN Translator 2.1.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.1.1',
+        VERSION:     '2.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="OpenXC CAN Translator 2.1.1 documentation" href="../index.html" />
+    <link rel="top" title="OpenXC CAN Translator 2.1.2 documentation" href="../index.html" />
     <link rel="next" title="UART Output" href="../output/uart.html" />
     <link rel="prev" title="CAN Message Definition" href="definitions.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="definitions.html" title="CAN Message Definition"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,14 +58,14 @@ a specific format as input. The input format is a JSON object like the one found
 in <a class="reference external" href="https://github.com/openxc/cantranslator/blob/master/src/signals.json.example">sample.json</a>.</p>
 <div class="section" id="json-format">
 <h2>JSON Format<a class="headerlink" href="#json-format" title="Permalink to this headline">¶</a></h2>
-<p>The JSON object is a list of CAN buses (the <tt class="docutils literal"><span class="pre">0x102</span></tt> is a unique bus address
-and means it will use the &#8220;CAN2&#8221; module in the microcontroller, and whatever
+<p>The JSON object is a list of CAN buses (the <tt class="docutils literal"><span class="pre">0x101</span></tt> is a unique bus address
+and means it will use the &#8220;CAN1&#8221; module in the microcontroller and whatever
 associated pins on the board), messages in each bus and a list of signals within
 each message.</p>
 <div class="section" id="can-bus">
 <h3>CAN Bus<a class="headerlink" href="#can-bus" title="Permalink to this headline">¶</a></h3>
 <p>The attributes of the CAN bus object (identified with the bus address in
-hex, e.g. <tt class="docutils literal"><span class="pre">0x102</span></tt>):</p>
+hex, i.e. only <tt class="docutils literal"><span class="pre">0x101</span></tt> and <tt class="docutils literal"><span class="pre">0x102</span></tt> are allowed):</p>
 <p><tt class="docutils literal"><span class="pre">speed</span></tt> - The CAN bus speed in Kbps.</p>
 <p><tt class="docutils literal"><span class="pre">messages</span></tt> - A mapping of CAN message objects that are on this bus,
 the key being the message ID in hex as a string (e.g. <tt class="docutils literal"><span class="pre">0x90</span></tt>).</p>
@@ -292,9 +292,12 @@ mapping file is <tt class="docutils literal"><span class="pre">mapping.json</spa
 <div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>./xml_to_json.py signals.xml mapping.json signals.json
 </pre></div>
 </div>
-<p>The script merges the two files, filling in the details of the CAN messages (bit
-position, bit size, offset, etc) in the JSON. The script creates the file
-<tt class="docutils literal"><span class="pre">signals.json</span></tt> which will work as input to the code generation script.</p>
+<p>The script scans <tt class="docutils literal"><span class="pre">mapping.json</span></tt> to identify the CAN messages and
+signals that you want to use from the XML file. It pulls the neccessary details
+of the messages (bit position, bit size, offset, etc) and outputs the resulting
+subset as JSON into the output file, <tt class="docutils literal"><span class="pre">signals.json</span></tt>.</p>
+<p>The resulting file together with <tt class="docutils literal"><span class="pre">mapping.json</span></tt> will work as input to the code
+generation script.</p>
 </div>
 </div>
 
@@ -361,7 +364,7 @@ position, bit size, offset, etc) in the JSON. The script creates the file
         <li class="right" >
           <a href="definitions.html" title="CAN Message Definition"
              >previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
