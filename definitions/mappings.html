@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>JSON Mapping Format &mdash; OpenXC CAN Translator 2.1.2 documentation</title>
+    <title>JSON Mapping Format &mdash; OpenXC CAN Translator 3.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.1.2',
+        VERSION:     '3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="OpenXC CAN Translator 2.1.2 documentation" href="../index.html" />
+    <link rel="top" title="OpenXC CAN Translator 3.0 documentation" href="../index.html" />
     <link rel="next" title="UART Output" href="../output/uart.html" />
     <link rel="prev" title="CAN Message Definition" href="definitions.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="definitions.html" title="CAN Message Definition"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,14 +58,15 @@ a specific format as input. The input format is a JSON object like the one found
 in <a class="reference external" href="https://github.com/openxc/cantranslator/blob/master/src/signals.json.example">sample.json</a>.</p>
 <div class="section" id="json-format">
 <h2>JSON Format<a class="headerlink" href="#json-format" title="Permalink to this headline">¶</a></h2>
-<p>The JSON object is a list of CAN buses (the <tt class="docutils literal"><span class="pre">0x101</span></tt> is a unique bus address
-and means it will use the &#8220;CAN1&#8221; module in the microcontroller and whatever
-associated pins on the board), messages in each bus and a list of signals within
-each message.</p>
+<p>The root level JSON object maps CAN bus addresses to CAN bus objects,  CAN
+message IDs to CAN message objects in each bus, and CAN signal name to signal
+object within each message.</p>
 <div class="section" id="can-bus">
 <h3>CAN Bus<a class="headerlink" href="#can-bus" title="Permalink to this headline">¶</a></h3>
-<p>The attributes of the CAN bus object (identified with the bus address in
-hex, i.e. only <tt class="docutils literal"><span class="pre">0x101</span></tt> and <tt class="docutils literal"><span class="pre">0x102</span></tt> are allowed):</p>
+<p>The object key for a CAN bus is a hex address that identifies which CAN
+controller on the microcontroller is attached to the bus. The platforms we are
+using now only have 2 CAN controllers, but by convention they are identified
+with <tt class="docutils literal"><span class="pre">0x101</span></tt> and <tt class="docutils literal"><span class="pre">0x102</span></tt> - these are the only acceptable bus addresses.</p>
 <p><tt class="docutils literal"><span class="pre">speed</span></tt> - The CAN bus speed in Kbps.</p>
 <p><tt class="docutils literal"><span class="pre">messages</span></tt> - A mapping of CAN message objects that are on this bus,
 the key being the message ID in hex as a string (e.g. <tt class="docutils literal"><span class="pre">0x90</span></tt>).</p>
@@ -159,7 +160,7 @@ process incoming OpenXC messages from the USB host. In the <tt class="docutils l
 section of the JSON object, you can specify the generic name of the
 OpenXC command and an associated function that matches the
 <tt class="docutils literal"><span class="pre">CommandHandler</span></tt> function prototype (from <tt class="docutils literal"><span class="pre">canutil.h</span></tt>):</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="n">bool</span> <span class="p">(</span><span class="o">*</span><span class="n">CommandHandler</span><span class="p">)(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="n">cJSON</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="n">cJSON</span><span class="o">*</span> <span class="n">event</span><span class="p">,</span>
+<div class="highlight-c"><div class="highlight"><pre><span class="kt">bool</span> <span class="p">(</span><span class="o">*</span><span class="n">CommandHandler</span><span class="p">)(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="n">cJSON</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="n">cJSON</span><span class="o">*</span> <span class="n">event</span><span class="p">,</span>
         <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span> <span class="kt">int</span> <span class="n">signalCount</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -207,13 +208,13 @@ wheel angle value. Modify the input JSON file to set the
 <tt class="docutils literal"><span class="pre">handleSteeringWheelAngle</span></tt>. If you&#8217;re using <tt class="docutils literal"><span class="pre">generate_code.py</span></tt>, the
 handlers should be saved in <tt class="docutils literal"><span class="pre">src/handlers.h</span></tt> and <tt class="docutils literal"><span class="pre">src/handlers.cpp</span></tt>:</p>
 <p><tt class="docutils literal"><span class="pre">src/handlers.h</span></tt>:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">float</span> <span class="n">handleSteeringWheelAngle</span><span class="p">(</span><span class="n">CanSignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span>
-        <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span> <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="n">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span class="kt">float</span> <span class="nf">handleSteeringWheelAngle</span><span class="p">(</span><span class="n">CanSignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span>
+        <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span> <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">);</span>
 </pre></div>
 </div>
 <p><tt class="docutils literal"><span class="pre">src/handlers.cpp</span></tt>:</p>
 <div class="highlight-c"><div class="highlight"><pre><span class="kt">float</span> <span class="nf">handleSteeringWheelAngle</span><span class="p">(</span><span class="n">CanSignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span>
-        <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span> <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="n">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span> <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span><span class="p">(</span><span class="n">signal</span><span class="o">-&gt;</span><span class="n">lastValue</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// left turn</span>
         <span class="n">value</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
@@ -224,14 +225,14 @@ handlers should be saved in <tt class="docutils literal"><span class="pre">src/h
 </div>
 <p>The valid return types for value handlers are <tt class="docutils literal"><span class="pre">bool</span></tt>, <tt class="docutils literal"><span class="pre">float</span></tt> and
 <tt class="docutils literal"><span class="pre">char*</span></tt> - the function prototype must match one of:</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">char</span><span class="o">*</span> <span class="n">customHandler</span><span class="p">(</span><span class="n">CanSignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span> <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span>
-        <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="n">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">);</span>
+<div class="highlight-c"><div class="highlight"><pre><span class="kt">char</span><span class="o">*</span> <span class="nf">customHandler</span><span class="p">(</span><span class="n">CanSignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span> <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span>
+        <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">);</span>
 
-<span class="kt">float</span> <span class="n">customHandler</span><span class="p">(</span><span class="n">CanSignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span> <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span>
-        <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="n">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">);</span>
+<span class="kt">float</span> <span class="nf">customHandler</span><span class="p">(</span><span class="n">CanSignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span> <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span>
+        <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">);</span>
 
-<span class="n">bool</span> <span class="n">customhandler</span><span class="p">(</span><span class="n">cansignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">cansignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span> <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span>
-        <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="n">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">);</span>
+<span class="kt">bool</span> <span class="nf">customhandler</span><span class="p">(</span><span class="n">cansignal</span><span class="o">*</span> <span class="n">signal</span><span class="p">,</span> <span class="n">cansignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span> <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span>
+        <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">send</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>where <tt class="docutils literal"><span class="pre">signal</span></tt> is a pointer to the <tt class="docutils literal"><span class="pre">CanSignal</span></tt> this is handling,
@@ -251,7 +252,7 @@ probably OK - for other signals, not so much.</p>
 <p>If you need greater precision, you can provide a custom handler for the
 entire message to guarantee they arrived together. You can generate 0, 1
 or many translated messages from one call to your handler function.</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="n">handleSteeringWheelMessage</span><span class="p">(</span><span class="kt">int</span> <span class="n">messageId</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">data</span><span class="p">,</span>
+<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">handleSteeringWheelMessage</span><span class="p">(</span><span class="kt">int</span> <span class="n">messageId</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">data</span><span class="p">,</span>
         <span class="n">CanSignal</span><span class="o">*</span> <span class="n">signals</span><span class="p">,</span> <span class="kt">int</span> <span class="n">signalCount</span><span class="p">,</span> <span class="n">Listener</span><span class="o">*</span> <span class="n">listener</span><span class="p">);</span>
     <span class="kt">float</span> <span class="n">steeringWheelAngle</span> <span class="o">=</span> <span class="n">decodeCanSignal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">signals</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">);</span>
     <span class="kt">float</span> <span class="n">steeringWheelSign</span> <span class="o">=</span> <span class="n">decodeCanSignal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">signals</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">data</span><span class="p">);</span>
@@ -364,7 +365,7 @@ generation script.</p>
         <li class="right" >
           <a href="definitions.html" title="CAN Message Definition"
              >previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installation &mdash; OpenXC CAN Translator 2.1.2 documentation</title>
+    <title>Installation &mdash; OpenXC CAN Translator 3.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.1.2',
+        VERSION:     '3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="OpenXC CAN Translator 2.1.2 documentation" href="../index.html" />
+    <link rel="top" title="OpenXC CAN Translator 3.0 documentation" href="../index.html" />
     <link rel="next" title="Flashing a Pre-compiled Binary" href="binary.html" />
     <link rel="prev" title="USB Device Driver" href="../output/usb.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="../output/usb.html" title="USB Device Driver"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -266,7 +266,7 @@ this driver.</p>
 </pre></div>
 </div>
 <p>Remove the Olimex sections from the FTDI kernel module, and then reload it:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>sudo sed -i <span class="s2">&quot;&quot;</span> -e <span class="s2">&quot;/Olimex/{N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;d;}&quot;</span> /System/Library/Extensions/FTDIUSBSerialDriver.kext/Contents/Info.plist
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>sudo sed -i <span class="s2">&quot;&quot;</span> -e <span class="s2">&quot;/Olimex OpenOCD JTAG A/{N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;d;}&quot;</span> /System/Library/Extensions/FTDIUSBSerialDriver.kext/Contents/Info.plist
 <span class="nv">$ </span>sudo kextunload /System/Library/Extensions/FTDIUSBSerialDriver.kext/
 <span class="nv">$ </span>sudo kextload /System/Library/Extensions/FTDIUSBSerialDriver.kext/
 </pre></div>
@@ -362,7 +362,7 @@ from the AUR.</p>
         <li class="right" >
           <a href="../output/usb.html" title="USB Device Driver"
              >previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

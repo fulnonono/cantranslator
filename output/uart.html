@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>UART Output &mdash; OpenXC CAN Translator 2.1.2 documentation</title>
+    <title>UART Output &mdash; OpenXC CAN Translator 3.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.1.2',
+        VERSION:     '3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="OpenXC CAN Translator 2.1.2 documentation" href="../index.html" />
+    <link rel="top" title="OpenXC CAN Translator 3.0 documentation" href="../index.html" />
     <link rel="next" title="USB Device Driver" href="usb.html" />
     <link rel="prev" title="JSON Mapping Format" href="../definitions/mappings.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="../definitions/mappings.html" title="JSON Mapping Format"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -76,11 +76,21 @@ interfaces when using flow control.</p>
 <li>Pin 18 - <tt class="docutils literal"><span class="pre">U1ARTS</span></tt>, connect this to the CTS line of the receiver.</li>
 <li>Pin 19 - <tt class="docutils literal"><span class="pre">U1ACTS</span></tt>, connect this to the RTS line of the receiver.</li>
 </ul>
+<p>An additional item to consider when using UART: typically you will want to rig
+the chipKIT to be self-powered (either from an external power source or the
+vehicle) if you&#8217;re going to use UART for adding Bluetooth support. There&#8217;s not
+much point in being wireless if you still need power from USB.</p>
+<p>In that case, move the USB power jumper from the 5v input on the Network Shield
+to A0 (analog input 0). Instead of using 5v to power the board, the firmware can
+use it to detect if USB is actually attached or not. The benefit of this is that
+if you connect USB, then disconnect it, we can detect that in the firmware and
+stop wasting time trying to send data over USB. This will dramatically increase
+the throughput over UART.</p>
 </div>
 <div class="section" id="blueboard">
 <h2>Blueboard<a class="headerlink" href="#blueboard" title="Permalink to this headline">¶</a></h2>
 <p>On the NGX Blueboard LPC1768-H, <tt class="docutils literal"><span class="pre">UART1</span></tt> is used for OpenXC output at the
-921600 baud rate. Like on the chipKIT, hardware flow control (RTS/CTS) is
+230000 baud rate. Like on the chipKIT, hardware flow control (RTS/CTS) is
 enabled, so CTS must be pulled low by the receiving device before data will be
 sent.</p>
 <ul class="simple">
@@ -147,7 +157,7 @@ sent.</p>
         <li class="right" >
           <a href="../definitions/mappings.html" title="JSON Mapping Format"
              >previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 2.1.2 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
