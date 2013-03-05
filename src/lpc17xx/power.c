@@ -61,7 +61,7 @@ void initializePower() {
 void updatePower() {
 }
 
-void CANActivity_IRQHandler(void) {
+void handleWakeup() {
     // TODO This isn't especially graceful, we just reset the device after a
     // wakeup. Then again, it makes the code a hell of a lot simpler because we
     // only have to worry about initialization of core peripherals in one spot,
@@ -73,9 +73,18 @@ void CANActivity_IRQHandler(void) {
     NVIC_SystemReset();
 }
 
+void CANActivity_IRQHandler(void) {
+    handleWakeup();
+}
+
+void USBActivity_IRQHandler(void) {
+    handleWakeup();
+}
+
 void enterLowPowerMode() {
     debug("Going to low power mode");
     NVIC_EnableIRQ(CANActivity_IRQn);
+    NVIC_EnableIRQ(USBActivity_IRQn);
 
     setPowerPassthroughStatus(false);
 
