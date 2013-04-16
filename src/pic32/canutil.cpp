@@ -2,6 +2,9 @@
 #include "canutil_pic32.h"
 #include "signals.h"
 #include "log.h"
+#include "gpio.h"
+
+#define CAN_ENABLE_PIN 38
 
 CAN can1Actual(CAN::CAN1);
 CAN can2Actual(CAN::CAN2);
@@ -45,6 +48,12 @@ void configureFilters(CanBus* bus, CanFilter* filters, int filterCount) {
 
 void initializeCan(CanBus* bus) {
     initializeCanCommon(bus);
+    // The CAN transceivers on the FleetCarma board need a pin pulled high to
+    // enable full CAN interaction (definitely required for bench testing with
+    // nothing else on the network ACking the messages, not required for listen
+    // only mode in a real vehicle network)
+    setGpioDirection(0, CAN_ENABLE_PIN, GPIO_DIRECTION_OUTPUT);
+    setGpioValue(0, CAN_ENABLE_PIN, GPIO_VALUE_LOW);
     // Switch the CAN module ON and switch it to Configuration mode. Wait till
     // the switch is complete
     CAN_CONTROLLER(bus)->enableModule(true);
