@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>UART Output &mdash; OpenXC CAN Translator 3.0 documentation</title>
+    <title>UART Output &mdash; OpenXC CAN Translator 3.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.0',
+        VERSION:     '3.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="OpenXC CAN Translator 3.0 documentation" href="../index.html" />
+    <link rel="top" title="OpenXC CAN Translator 3.2 documentation" href="../index.html" />
     <link rel="next" title="USB Device Driver" href="usb.html" />
     <link rel="prev" title="JSON Mapping Format" href="../definitions/mappings.html" /> 
   </head>
@@ -42,7 +40,7 @@
         <li class="right" >
           <a href="../definitions/mappings.html" title="JSON Mapping Format"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,8 +59,8 @@ direction of the USB endpoint, you can send identically formatted
 messages in the opposite direction on the serial device - from the host
 to the CAN translator. They&#8217;ll be processed in exactly the same way.
 These write messages are accepted via serial even if USB is connected.</p>
-<div class="section" id="chipkit-max32">
-<h2>chipKIT Max32<a class="headerlink" href="#chipkit-max32" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="digilent-chipkit-max32">
+<h2>Digilent chipKIT Max32<a class="headerlink" href="#digilent-chipkit-max32" title="Permalink to this headline">¶</a></h2>
 <p>On the chipKIT, <tt class="docutils literal"><span class="pre">UART1A</span></tt> is used for OpenXC output at the 460800 baud rate.
 Hardware flow control (RTS/CTS) is enabled, so CTS must be pulled low by the
 receiving device before data will be sent.</p>
@@ -87,12 +85,11 @@ if you connect USB, then disconnect it, we can detect that in the firmware and
 stop wasting time trying to send data over USB. This will dramatically increase
 the throughput over UART.</p>
 </div>
-<div class="section" id="blueboard">
-<h2>Blueboard<a class="headerlink" href="#blueboard" title="Permalink to this headline">¶</a></h2>
-<p>On the NGX Blueboard LPC1768-H, <tt class="docutils literal"><span class="pre">UART1</span></tt> is used for OpenXC output at the
-230000 baud rate. Like on the chipKIT, hardware flow control (RTS/CTS) is
-enabled, so CTS must be pulled low by the receiving device before data will be
-sent.</p>
+<div class="section" id="nxp-lpc17xx">
+<h2>NXP LPC17xx<a class="headerlink" href="#nxp-lpc17xx" title="Permalink to this headline">¶</a></h2>
+<p>On the LPC17xx, <tt class="docutils literal"><span class="pre">UART1</span></tt> is used for OpenXC output at the 230000 baud rate.
+Like on the chipKIT, hardware flow control (RTS/CTS) is enabled, so CTS must be
+pulled low by the receiving device before data will be sent.</p>
 <ul class="simple">
 <li>Pin 2.0 - <tt class="docutils literal"><span class="pre">UART1</span> <span class="pre">TX</span></tt>, connect this to the RX line of the receiver.</li>
 <li>Pin 2.1 - <tt class="docutils literal"><span class="pre">UART1</span> <span class="pre">RX</span></tt>, connect this to the TX line of the receiver.</li>
@@ -111,8 +108,8 @@ sent.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">UART Output</a><ul>
-<li><a class="reference internal" href="#chipkit-max32">chipKIT Max32</a></li>
-<li><a class="reference internal" href="#blueboard">Blueboard</a></li>
+<li><a class="reference internal" href="#digilent-chipkit-max32">Digilent chipKIT Max32</a></li>
+<li><a class="reference internal" href="#nxp-lpc17xx">NXP LPC17xx</a></li>
 </ul>
 </li>
 </ul>
@@ -157,12 +154,12 @@ sent.</p>
         <li class="right" >
           <a href="../definitions/mappings.html" title="JSON Mapping Format"
              >previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Christopher Peplin.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

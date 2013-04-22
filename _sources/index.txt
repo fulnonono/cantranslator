@@ -4,7 +4,7 @@ OpenXC CAN Translator
 
 .. image:: /_static/logo.png
 
-:Version: 3.0
+:Version: 3.2
 :Web: http://openxcplatform.com
 :Documentation: http://openxcplatform.com/cantranslator
 :Source: http://github.com/openxc/cantranslator
@@ -27,6 +27,12 @@ The CAN translation module code runs on an Arduino-compatible microcontroller
 connected to one or more CAN buses. It receives either all CAN messages or a
 filtered subset, performs any unit conversion or factoring required and outputs
 a generic version to a USB interface.
+
+The firmware currently supports 3 platforms:
+
+- chipKIT Max32 (``PLATFORM=CHIPKIT``)
+- NGX Blueboard (``PLATFORM=BLUEBOARD``)
+- Ford OpenXC prototype vehicle interface (``PLATFORM=FORDBOARD``)
 
 Pre-built Binary
 ================
@@ -98,6 +104,34 @@ to our issue tracker at http://github.com/openxc/cantranslator/issues/
 
 .. _`OpenXC Python library`: https://github.com/openxc/openxc-python
 .. _`output format`: http://openxcplatform.com/vehicle-interface/output-format.html
+
+LED Lights
+==========
+
+With no better place for this information right now, here's how the LED lights
+work on the supported boards.
+
+chipKIT
+-------
+
+The chipKIT has 1 user controllable LED. When CAN activity is detected, the LED
+will be enabled (it's green).
+
+Ford ARM-based Prototype
+------------------------
+
+The Ford prototype has 2 RGB LEDs.
+
+**LED A**
+
+- CAN activity detected - Blue
+- No CAN activity on either bus - Off
+
+**LED B**
+
+- USB connected, Bluetooth not connected - Green
+- Bluetooth connected, USB in either state - Blue
+- Neither USB or Bluetooth connected - Off
 
 Related Projects
 ================

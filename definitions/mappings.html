@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>JSON Mapping Format &mdash; OpenXC CAN Translator 3.0 documentation</title>
+    <title>JSON Mapping Format &mdash; OpenXC CAN Translator 3.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.0',
+        VERSION:     '3.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="OpenXC CAN Translator 3.0 documentation" href="../index.html" />
+    <link rel="top" title="OpenXC CAN Translator 3.2 documentation" href="../index.html" />
     <link rel="next" title="UART Output" href="../output/uart.html" />
     <link rel="prev" title="CAN Message Definition" href="definitions.html" /> 
   </head>
@@ -42,7 +40,7 @@
         <li class="right" >
           <a href="definitions.html" title="CAN Message Definition"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -171,15 +169,23 @@ right turn signal are split into two signals instead of the 1
 state-based signal used by OpenXC. You can use the <tt class="docutils literal"><span class="pre">sendCanSignal</span></tt>
 function in <tt class="docutils literal"><span class="pre">canwrite.h</span></tt> to do the actual data sending on the CAN bus.</p>
 </div>
-<div class="section" id="message-handlers">
-<h2>Message Handlers<a class="headerlink" href="#message-handlers" title="Permalink to this headline">¶</a></h2>
-<p>The default handler for each signal is a simple passthrough, translating
-the signal&#8217;s ID to an abstracted name (e.g. <tt class="docutils literal"><span class="pre">SteeringWheelAngle</span></tt>) and
-its value from engineering units to something more usable. Some signals
-require additional processing that you may wish to do within the
-translator and not on the host device. Other signals may need to be
-combined to make a composite signal that&#8217;s more meaningful to
-developers.</p>
+<div class="section" id="value-message-handlers">
+<h2>Value &amp; Message Handlers<a class="headerlink" href="#value-message-handlers" title="Permalink to this headline">¶</a></h2>
+<p>There are two levels of custom handlers:</p>
+<ul class="simple">
+<li>Message handlers - use these for custom processing of the entire CAN
+message.</li>
+<li>Value handlers - use these for making non-standard transformations to
+a signal value</li>
+</ul>
+<div class="section" id="value-handlers">
+<h3>Value Handlers<a class="headerlink" href="#value-handlers" title="Permalink to this headline">¶</a></h3>
+<p>The default value handler for each signal is a simple passthrough, translating
+the signal&#8217;s ID to an abstracted name (e.g. <tt class="docutils literal"><span class="pre">SteeringWheelAngle</span></tt>) and its
+value from engineering units to something more usable. Some signals require
+additional processing that you may wish to do within the translator and not on
+the host device. Other signals may need to be combined to make a composite
+signal that&#8217;s more meaningful to developers.</p>
 <p>An good example is steering wheel angle. For an app developer to get a
 value that ranges from e.g. -350 to +350, we need to combine two
 different signals - the angle and the sign. If you want to make this
@@ -191,13 +197,6 @@ than float. A handler is provided for dealing with boolean values, the
 <tt class="docutils literal"><span class="pre">false</span></tt> for 0.0. If you want to translate integer state values to
 string names (for parsing as an enum, for example) you will need to
 write a value handler that returns a <tt class="docutils literal"><span class="pre">char*</span></tt>.</p>
-<p>There are two levels of custom handlers:</p>
-<ul class="simple">
-<li>Message handlers - use these for custom processing of the entire CAN
-message.</li>
-<li>Value handlers - use these for making non-standard transformations to
-a signal value</li>
-</ul>
 <p>For this example, we want to modify the value of <tt class="docutils literal"><span class="pre">SteeringWheelAngle</span></tt>
 by setting the sign positive or negative based on the value of the other
 signal (<tt class="docutils literal"><span class="pre">StrAnglSign</span></tt>). Every time a CAN signal is received, the new
@@ -244,11 +243,19 @@ USB.</p>
 useful if you don&#8217;t want to keep notifying the same status over and over
 again, but only in the event of a change in value (you can use the
 <tt class="docutils literal"><span class="pre">lastValue</span></tt> field on the CanSignal object to determine if this is
-true).</p>
+true). It&#8217;s also good practice to inspect the value of <tt class="docutils literal"><span class="pre">send</span></tt> when your custom
+handler is called - the normal translation stack may have decided the data
+shouldn&#8217;t be sent (e.g. the value hasn&#8217;t changed and <tt class="docutils literal"><span class="pre">sendSame</span> <span class="pre">==</span> <span class="pre">false</span></tt>).
+Handlers are called every time a signal is received, even if <tt class="docutils literal"><span class="pre">send</span> <span class="pre">==</span> <span class="pre">false</span></tt>,
+so that you have the flexibility to implement custom processing that depends on
+receiving every data point.</p>
 <p>A known issue with this method is that there is no guarantee that the
 last value of another signal arrived in the message or before/after the
 value you&#8217;re current modifying. For steering wheel angle, that&#8217;s
 probably OK - for other signals, not so much.</p>
+</div>
+<div class="section" id="message-handlers">
+<h3>Message Handlers<a class="headerlink" href="#message-handlers" title="Permalink to this headline">¶</a></h3>
 <p>If you need greater precision, you can provide a custom handler for the
 entire message to guarantee they arrived together. You can generate 0, 1
 or many translated messages from one call to your handler function.</p>
@@ -274,6 +281,7 @@ values in <tt class="docutils literal"><span class="pre">signal-&gt;lastvalue</s
 <tt class="docutils literal"><span class="pre">ignoreHandler</span></tt> as the <tt class="docutils literal"><span class="pre">value_handler</span></tt> for signals don&#8217;t want to
 double send. The reason we don&#8217;t do this automatically is that not all
 signals in a message are always handled by the same message handler.</p>
+</div>
 </div>
 <div class="section" id="generating-json-from-vector-canoe-database">
 <h2>Generating JSON from Vector CANoe Database<a class="headerlink" href="#generating-json-from-vector-canoe-database" title="Permalink to this headline">¶</a></h2>
@@ -319,7 +327,11 @@ generation script.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#device-to-vehicle-commands">Device to Vehicle Commands</a></li>
+<li><a class="reference internal" href="#value-message-handlers">Value &amp; Message Handlers</a><ul>
+<li><a class="reference internal" href="#value-handlers">Value Handlers</a></li>
 <li><a class="reference internal" href="#message-handlers">Message Handlers</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#generating-json-from-vector-canoe-database">Generating JSON from Vector CANoe Database</a></li>
 </ul>
 </li>
@@ -365,12 +377,12 @@ generation script.</p>
         <li class="right" >
           <a href="definitions.html" title="CAN Message Definition"
              >previous</a> |</li>
-        <li><a href="../index.html">OpenXC CAN Translator 3.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">OpenXC CAN Translator 3.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Christopher Peplin.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

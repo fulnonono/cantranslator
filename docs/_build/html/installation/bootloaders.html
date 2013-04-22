@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bootloaders &mdash; OpenXC CAN Translator 3.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="OpenXC CAN Translator 3.2 documentation" href="../index.html" />
+    <link rel="next" title="Building from Source" href="compiling.html" />
+    <link rel="prev" title="Flashing a Pre-compiled Binary" href="binary.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="compiling.html" title="Building from Source"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="binary.html" title="Flashing a Pre-compiled Binary"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">OpenXC CAN Translator 3.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bootloaders">
+<h1>Bootloaders<a class="headerlink" href="#bootloaders" title="Permalink to this headline">¶</a></h1>
+<p>For those who don&#8217;t have special microcontroller programming hardware, we strive
+to make the vehicle interface firmware compatible with USB bootloaders. This
+allows reflashing the firmware by copying a file over to a simulated USB drive,
+or by using the popular avrdude tool.</p>
+<div class="section" id="digilent-chipkit-max32">
+<h2>Digilent chipKIT Max32<a class="headerlink" href="#digilent-chipkit-max32" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/openxc/PIC32-avrdude-bootloader">PIC32 avrdude bootloader</a> is tested and working and
+allows flashing over USB with <tt class="docutils literal"><span class="pre">avrdude</span></tt>. All stock chipKITs are programmed
+with a compatible bootloader at the factory.</p>
+</div>
+<div class="section" id="nxp-lpc17xx">
+<h2>NXP LPC17xx<a class="headerlink" href="#nxp-lpc17xx" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/openxc/openlpc-USB_Bootloader">OpenLPC USB bootloader</a>
+is tested and working, and enables the LPC17xx to appear as a USB drive. See the
+documentation in that repository for instructions on how to flash the bootloader
+(a JTAG programmer is required).</p>
+<p>Once you have a compiled firmware <tt class="docutils literal"><span class="pre">.bin</span></tt> file (either from an OEM or compiled
+from source), hold down the bootloader button on the board and attach the USB
+connector to your computer. When the LPC17xx drive appears, delete the existing
+firmware file and copy the new one. Eject the device and power cycle it - you
+should not be running the freshly compiled firmware.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bootloaders</a><ul>
+<li><a class="reference internal" href="#digilent-chipkit-max32">Digilent chipKIT Max32</a></li>
+<li><a class="reference internal" href="#nxp-lpc17xx">NXP LPC17xx</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="binary.html"
+                        title="previous chapter">Flashing a Pre-compiled Binary</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compiling.html"
+                        title="next chapter">Building from Source</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/installation/bootloaders.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="compiling.html" title="Building from Source"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="binary.html" title="Flashing a Pre-compiled Binary"
+             >previous</a> |</li>
+        <li><a href="../index.html">OpenXC CAN Translator 3.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Peplin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

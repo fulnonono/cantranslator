@@ -14,6 +14,37 @@ Cygwin in Windows.
    When running ``make`` to compile, try adding the ``-j4`` flag to build jobs
    in parallel - the speedup can be quite dramatic.
 
+Makefile Options
+=============
+
+These options are passed as shell environment variables to the Makefile, e.g.
+
+.. code-block:: sh
+
+   $ DEBUG=1 make
+
+``DEBUG`` - Set to ``1`` to compile with debugging symbols and to enable debug
+   logging over :doc:`UART`.
+
+``PLATFORM`` - Select the target microcontroller platform. Supported options
+   are:
+
+   - ``CHIPKIT`` - chipKIT Max32
+   - ``BLUEBOARD`` - NGX Blueboard
+   - ``FORDBOARD`` - Ford OpenXC prototype vehicle interface
+
+``UART`` - By default, UART output of OpenXC vehicle data is disabled. Set this
+to ``1`` to enable :doc:`UART` output.
+
+``ETHERNET`` - By default, TCP output of OpenXC vehicle data is disabled. Set
+this to ``1`` to enable TCP output on boards that have an Ethernet interface (only
+the chipKIT Max32 right now).
+
+``BOOTLOADER`` - By default, the firmware is built to run on a microcontroller
+with a :doc:`bootloader <bootloaders>`, allowing you to update the firmware
+without specialized hardware. If you want to build to run on bare-metal hardware
+(i.e. start at the top of flash memory) set this to ``0``.
+
 chipKIT Max32
 =============
 
@@ -42,6 +73,9 @@ and if in Windows it appeared as COM4:
 
     $ SERIAL_PORT=com4 make flash
 
+This build process assumes your chipKIT is running the :doc:`avrdude bootloader
+<bootloaders>` - all chipKITs come programmed with a compatible bootloader by
+default.
 
 Troubleshooting
 ---------------
@@ -107,13 +141,31 @@ it doesn't seem to pick up on the GCC ``__builtin_*`` functions, and
 some of the chipKIT libraries are finicky. This won't have an effect on
 the actual build process, just the error reporting.
 
-NGX Blueboard
+NXP LPC17xx
 ==============
 
-Support for the NXP LPC17xx, an ARM Cortex M3 microcontroller, is
-experimental at the moment and the documentation is incomplete. We are
-building successfully on the NGX Blueboard 1768-H using the Olimex
-ARM-OCD-USB JTAG programmer.
+The NXP LPC17xx, an ARM Cortex M3 microcontroller, is also supported on a number
+of boards. The NGX Blueboard 1768-H is tested and working (although it needs
+some additional hardware to add CAN bus support).
+
+USB Bootloader
+---------------
+
+If you are running a :doc:`supported bootloader <bootloaders>`, you don't need
+any special programming hardware. Compile the firmware to run under the
+bootloader:
+
+.. code-block:: sh
+
+   $ make clean
+   $ PLATFORM=BLUEBOARD BOOTLOADER=1 make -j4
+
+The compiled firmware will be located at
+``build/lpc17xx/cantranslator-lpc17xx.bin``. See the `bootloaders <bootloaders`_
+page for instructions on how to load the firmware.
+
+Bare Metal
+-----------
 
 Once the :doc:`dependencies <installation>` are installed, attach a JTAG adapter to
 your computer and the CAN translator, then compile and flash:
@@ -125,6 +177,6 @@ your computer and the CAN translator, then compile and flash:
     $ PLATFORM=BLUEBOARD make flash
 
 The config files in this repository assume your JTAG adapter is the
-Olimex ARM-USB-OCD unit. If you have a different unit, change the first
-line in ``conf/flash.cfg`` to the correct value.
-
+Olimex ARM-USB-OCD unit. If you have a different unit, modify the
+``src/lpc17xx/lpc17xx.mk`` Makefile to load your programmer's OpenOCD
+configuration.
