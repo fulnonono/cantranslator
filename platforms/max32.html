@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Digilent chipKIT Max32 &mdash; OpenXC CAN Translator 3.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.3-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="OpenXC CAN Translator 3.3-dev documentation" href="../index.html" />
+    <link rel="up" title="Supported Platforms" href="platforms.html" />
+    <link rel="next" title="CAN Message Definition" href="../definitions/definitions.html" />
+    <link rel="prev" title="Ford Prototype Vehicle Interface" href="ford.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../definitions/definitions.html" title="CAN Message Definition"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ford.html" title="Ford Prototype Vehicle Interface"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">OpenXC CAN Translator 3.3-dev documentation</a> &raquo;</li>
+          <li><a href="platforms.html" accesskey="U">Supported Platforms</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="digilent-chipkit-max32">
+<h1>Digilent chipKIT Max32<a class="headerlink" href="#digilent-chipkit-max32" title="Permalink to this headline">¶</a></h1>
+<p>To build for the chipKIT Max32, compile with the flag <tt class="docutils literal"><span class="pre">PLATFORM=CHIPKIT</span></tt>. The
+chipKIT is also the default platform, so the flag is optional.</p>
+<div class="section" id="flashing-a-pre-compiled-firmware">
+<h2>Flashing a Pre-compiled Firmware<a class="headerlink" href="#flashing-a-pre-compiled-firmware" title="Permalink to this headline">¶</a></h2>
+<p>These instructions assume your chipKIT is running the stock firmware, the
+avrdude bootloader.</p>
+<div class="section" id="usb-cable">
+<h3>USB Cable<a class="headerlink" href="#usb-cable" title="Permalink to this headline">¶</a></h3>
+<p>You need to have the <strong>mini-USB</strong> port on the chipKIT connected to your computer
+to upload a new firmware. This is different than the micro-USB port that you use
+to read vehicle data - see the <a class="reference external" href="http://openxcplatform.com/vehicle-interface/index.html#connections">device connections</a> section
+of the <a class="reference external" href="http://openxcplatform.com">OpenXC website</a> to make sure you have the correct cable attached.</p>
+</div>
+<div class="section" id="uploading-script">
+<h3>Uploading Script<a class="headerlink" href="#uploading-script" title="Permalink to this headline">¶</a></h3>
+<p>Open a terminal run the <tt class="docutils literal"><span class="pre">upload_hex.sh</span></tt> script from the <tt class="docutils literal"><span class="pre">cantranslator</span></tt>
+directory, passing it the path to the <tt class="docutils literal"><span class="pre">.hex</span></tt> file you downloaded:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>cantranslator
+<span class="nv">$ </span>script/upload_hex.sh &lt;firmware file you downloaded&gt;.hex
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">upload_hex.sh</span></tt> script attempts to install all required dependencies
+automatically, and it is tested in Cygwin, OS X Mountain Lion, Ubuntu 12.04 and
+Arch Linux - other operating systems may need to <a class="reference internal" href="#manual-deps"><em>install the dependencies
+manually</em></a>.</p>
+<p>If you have more than one virtual serial (COM) port active, you may need to
+explicitly specify which port to use. Pass the port name as the second argument
+to the script, e.g. in Linux:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>script/upload_hex.sh &lt;firmware file you downloaded&gt;.hex /dev/ttyUSB2
+</pre></div>
+</div>
+<p>and in Windows, e.g. if you needed to use <tt class="docutils literal"><span class="pre">com4</span></tt> instead of the default
+<tt class="docutils literal"><span class="pre">com3</span></tt>:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>script/upload_hex.sh &lt;firmware file you downloaded&gt;.hex com4
+</pre></div>
+</div>
+<div class="section" id="windows-notes">
+<h4>Windows notes<a class="headerlink" href="#windows-notes" title="Permalink to this headline">¶</a></h4>
+<p>In Windows, this command will only work in Cygwin, not the standard
+<tt class="docutils literal"><span class="pre">cmd.exe</span></tt> or Powershell.</p>
+<p>If you get errors about <tt class="docutils literal"><span class="pre">$'\r':</span> <span class="pre">command</span> <span class="pre">not</span> <span class="pre">found</span></tt> then your Git configuration
+added Windows-style <tt class="docutils literal"><span class="pre">CRLF</span></tt> line endings. Run this first to ignore the <tt class="docutils literal"><span class="pre">CR</span></tt>:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">set</span> -o igncr <span class="o">&amp;&amp;</span> <span class="nb">export </span>SHELLOPTS
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dependencies">
+<span id="manual-deps"></span><h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
+<p>If the flashing script failed, you may need to install the dependencies
+manually.</p>
+<div class="section" id="ftdi-driver">
+<h4>FTDI Driver<a class="headerlink" href="#ftdi-driver" title="Permalink to this headline">¶</a></h4>
+<p>If you are using Windows or OS X, you need to install the FTDI
+driver. If you didn&#8217;t need to install MPIDE, you can download the driver
+separately from <a class="reference external" href="http://www.ftdichip.com/Drivers/VCP.htm">FTDI</a>.</p>
+</div>
+<div class="section" id="avr-programmer">
+<h4>AVR Programmer<a class="headerlink" href="#avr-programmer" title="Permalink to this headline">¶</a></h4>
+<p>In order to program the CAN translator, you need to install an AVR programmer.
+There are a number of free options that will work.</p>
+<p><em>With MPIDE</em></p>
+<p>If you have <a class="reference external" href="https://github.com/chipKIT32/chipKIT32-MAX/downloads">MPIDE</a> installed, that already includes a version of avrdude. You
+need to set the <tt class="docutils literal"><span class="pre">MPIDE_DIR</span></tt> environment variable in your terminal to point to
+the folder where you installed MPIDE. Once set, you should be able to use
+<a class="reference external" href="https://github.com/openxc/cantranslator/blob/master/script/upload_hex.sh">upload_hex.sh</a>.</p>
+<p><em>Without MPIDE</em></p>
+<p>If you do not already have <a class="reference external" href="https://github.com/chipKIT32/chipKIT32-MAX/downloads">MPIDE</a> installed (and that&#8217;s fine, you don&#8217;t really
+need it), you can install a programmer seprately:</p>
+<ul>
+<li><p class="first">Linux - Look for <tt class="docutils literal"><span class="pre">avrdude</span></tt> in your distribution&#8217;s package manager.</p>
+</li>
+<li><p class="first">OS X - Install <tt class="docutils literal"><span class="pre">avrdude</span></tt> with <a class="reference external" href="http://mxcl.github.com/homebrew/">Homebrew</a>.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Windows</dt>
+<dd><ul class="first last simple">
+<li>Install <a class="reference external" href="http://www.cygwin.com">Cygwin</a> and <a class="reference external" href="https://github.com/chipKIT32/chipKIT32-MAX/downloads">MPIDE</a>, and follow the
+<a class="reference internal" href="../installation/installation.html"><em>Installation</em></a> documentation to configure the MPIDE environment
+variables.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="bootloader">
+<h2>Bootloader<a class="headerlink" href="#bootloader" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/openxc/PIC32-avrdude-bootloader">PIC32 avrdude bootloader</a> is tested and working and
+allows flashing over USB with <tt class="docutils literal"><span class="pre">avrdude</span></tt>. All stock chipKITs are programmed
+with a compatible bootloader at the factory.</p>
+</div>
+<div class="section" id="compiling">
+<h2>Compiling<a class="headerlink" href="#compiling" title="Permalink to this headline">¶</a></h2>
+<p>Once the <a class="reference internal" href="../installation/installation.html"><em>dependencies</em></a> are installed, attach the chipKIT to
+your computer with a mini-USB cable, <tt class="docutils literal"><span class="pre">cd</span></tt> into the <tt class="docutils literal"><span class="pre">src</span></tt> subdirectory, build
+and upload to the device.</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>make clean
+<span class="nv">$ </span>make
+<span class="nv">$ </span>make flash
+</pre></div>
+</div>
+<p>If the flash command can&#8217;t find your chipKIT, you may need to set the
+<tt class="docutils literal"><span class="pre">SERIAL_PORT</span></tt> variable if the serial emulator doesn&#8217;t show up as
+<tt class="docutils literal"><span class="pre">/dev/ttyUSB*</span></tt> in Linux, <tt class="docutils literal"><span class="pre">/dev/tty.usbserial*</span></tt> in Mac OS X or <tt class="docutils literal"><span class="pre">com3</span></tt> in
+Windows. For example, if the chipKIT shows up as <tt class="docutils literal"><span class="pre">/dev/ttyUSB4</span></tt>:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ SERIAL_PORT</span><span class="o">=</span>/dev/ttyUSB4 make flash
+</pre></div>
+</div>
+<p>and if in Windows it appeared as COM4:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ SERIAL_PORT</span><span class="o">=</span>com4 make flash
+</pre></div>
+</div>
+<p>This build process assumes your chipKIT is running the
+<a class="reference internal" href="../installation/bootloaders.html"><em>avrdude bootloader</em></a> - all chipKITs come
+programmed with a compatible bootloader by default.</p>
+</div>
+<div class="section" id="ide-support">
+<h2>IDE Support<a class="headerlink" href="#ide-support" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to use an IDE like Eclipse to edit and compile the
+project.</p>
+<ul class="simple">
+<li>Follow the directions in the above &#8220;Installation&#8221; section.</li>
+<li>Install Eclipse with the <a class="reference external" href="http://www.eclipse.org/cdt/">CDT project</a></li>
+<li>In Eclipse, go to
+<tt class="docutils literal"><span class="pre">File</span> <span class="pre">-&gt;</span> <span class="pre">Import</span> <span class="pre">-&gt;</span> <span class="pre">C/C++</span> <span class="pre">-&gt;</span> <span class="pre">Existing</span> <span class="pre">Code</span> <span class="pre">as</span> <span class="pre">Makefile</span> <span class="pre">Project</span></tt> and
+then select the <tt class="docutils literal"><span class="pre">cantranslator/src</span></tt> folder.</li>
+<li>In the project&#8217;s properties, under
+<tt class="docutils literal"><span class="pre">C/C++</span> <span class="pre">General</span> <span class="pre">-&gt;</span> <span class="pre">Paths</span> <span class="pre">and</span> <span class="pre">Symbols</span></tt>, add these to the include
+paths for C and C++:<ul>
+<li><tt class="docutils literal"><span class="pre">${MPIDE_DIR}/hardware/pic32/compiler/pic32-tools/pic32mx/include</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">${MPIDE_DIR}/hardware/pic32/cores/pic32</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">/src/libs/CDL/LPC17xxLib/inc</span></tt> (add as a &#8220;workspace
+path&#8221;)</li>
+<li><tt class="docutils literal"><span class="pre">/src/libs/chipKITCAN</span></tt> (add as a &#8220;workspace path&#8221;)</li>
+<li><tt class="docutils literal"><span class="pre">/src/libs/chipKITUSBDevice</span></tt> (add as a &#8220;workspace
+path&#8221;)</li>
+<li><tt class="docutils literal"><span class="pre">/src/libs/chipKITUSBDevice/utility</span></tt> (add as a
+&#8220;workspace path&#8221;)</li>
+<li><tt class="docutils literal"><span class="pre">/src/libs/chipKITEthernet</span></tt> (add as a &#8220;workspace
+path&#8221;)</li>
+<li><tt class="docutils literal"><span class="pre">/usr/include</span></tt> (only if you want to use the test suite, which
+requires the <tt class="docutils literal"><span class="pre">check</span></tt> C library)</li>
+</ul>
+</li>
+<li>In the same section under Symbols, if you are building for the
+chipKIT define a symbol with the name <tt class="docutils literal"><span class="pre">__PIC32__</span></tt></li>
+<li>In the project folder listing, select
+<tt class="docutils literal"><span class="pre">Resource</span> <span class="pre">Configurations</span> <span class="pre">-&gt;</span> <span class="pre">Exclude</span> <span class="pre">from</span>&nbsp;&nbsp; <span class="pre">Build</span></tt> for these
+folders:<ul>
+<li><tt class="docutils literal"><span class="pre">src/libs</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">build</span></tt></li>
+</ul>
+</li>
+</ul>
+<p>If you didn&#8217;t set up the environment variables from the <tt class="docutils literal"><span class="pre">Installation</span></tt>
+section (e.g. <tt class="docutils literal"><span class="pre">MPIDE_HOME</span></tt>), you can also do that from within Eclipse
+in <tt class="docutils literal"><span class="pre">C/C++</span></tt> project settings.</p>
+<p>There will still be some errors in the Eclipse problem detection, e.g.
+it doesn&#8217;t seem to pick up on the GCC <tt class="docutils literal"><span class="pre">__builtin_*</span></tt> functions, and
+some of the chipKIT libraries are finicky. This won&#8217;t have an effect on
+the actual build process, just the error reporting.</p>
+</div>
+<div class="section" id="usb">
+<h2>USB<a class="headerlink" href="#usb" title="Permalink to this headline">¶</a></h2>
+<p>The micro-USB port on the Digilent Network Shield is used to send and receive
+OpenXC messages. The mini-USB cable on the Max32 itself is only used for
+re-programming.</p>
+</div>
+<div class="section" id="uart">
+<h2>UART<a class="headerlink" href="#uart" title="Permalink to this headline">¶</a></h2>
+<p>On the chipKIT, <tt class="docutils literal"><span class="pre">UART1A</span></tt> is used for OpenXC output at the 460800 baud rate.
+Hardware flow control (RTS/CTS) is enabled, so CTS must be pulled low by the
+receiving device before data will be sent.</p>
+<p><tt class="docutils literal"><span class="pre">UART1A</span></tt> is also used by the USB-Serial connection, so in order to flash the
+PIC32, the Tx/Rx lines must be disconnected. Ideally we could leave that UART
+interface for debugging, but there are conflicts with all other exposed UART
+interfaces when using flow control.</p>
+<ul class="simple">
+<li>Pin 0 - <tt class="docutils literal"><span class="pre">U1ARX</span></tt>, connect this to the TX line of the receiver.</li>
+<li>Pin 1 - <tt class="docutils literal"><span class="pre">U1ATX</span></tt>, connect this to the RX line of the receiver.</li>
+<li>Pin 18 - <tt class="docutils literal"><span class="pre">U1ARTS</span></tt>, connect this to the CTS line of the receiver.</li>
+<li>Pin 19 - <tt class="docutils literal"><span class="pre">U1ACTS</span></tt>, connect this to the RTS line of the receiver.</li>
+</ul>
+<p>An additional item to consider when using UART: typically you will want to rig
+the chipKIT to be self-powered (either from an external power source or the
+vehicle) if you&#8217;re going to use UART for adding Bluetooth support. There&#8217;s not
+much point in being wireless if you still need power from USB.</p>
+<p>In that case, move the USB power jumper from the 5v input on the Network Shield
+to A0 (analog input 0). Instead of using 5v to power the board, the firmware can
+use it to detect if USB is actually attached or not. The benefit of this is that
+if you connect USB, then disconnect it, we can detect that in the firmware and
+stop wasting time trying to send data over USB. This will dramatically increase
+the throughput over UART.</p>
+</div>
+<div class="section" id="debug-logging">
+<h2>Debug Logging<a class="headerlink" href="#debug-logging" title="Permalink to this headline">¶</a></h2>
+<p>On the chipKIT Max32, logging will be on UART2 (Pin 16 - Tx, Pin 17 - Rx) at
+115200 baud.</p>
+</div>
+<div class="section" id="led-lights">
+<h2>LED Lights<a class="headerlink" href="#led-lights" title="Permalink to this headline">¶</a></h2>
+<p>The chipKIT has 1 user controllable LED. When CAN activity is detected, the LED
+will be enabled (it&#8217;s green).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Digilent chipKIT Max32</a><ul>
+<li><a class="reference internal" href="#flashing-a-pre-compiled-firmware">Flashing a Pre-compiled Firmware</a><ul>
+<li><a class="reference internal" href="#usb-cable">USB Cable</a></li>
+<li><a class="reference internal" href="#uploading-script">Uploading Script</a><ul>
+<li><a class="reference internal" href="#windows-notes">Windows notes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a><ul>
+<li><a class="reference internal" href="#ftdi-driver">FTDI Driver</a></li>
+<li><a class="reference internal" href="#avr-programmer">AVR Programmer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bootloader">Bootloader</a></li>
+<li><a class="reference internal" href="#compiling">Compiling</a></li>
+<li><a class="reference internal" href="#ide-support">IDE Support</a></li>
+<li><a class="reference internal" href="#usb">USB</a></li>
+<li><a class="reference internal" href="#uart">UART</a></li>
+<li><a class="reference internal" href="#debug-logging">Debug Logging</a></li>
+<li><a class="reference internal" href="#led-lights">LED Lights</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ford.html"
+                        title="previous chapter">Ford Prototype Vehicle Interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../definitions/definitions.html"
+                        title="next chapter">CAN Message Definition</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/platforms/max32.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../definitions/definitions.html" title="CAN Message Definition"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ford.html" title="Ford Prototype Vehicle Interface"
+             >previous</a> |</li>
+        <li><a href="../index.html">OpenXC CAN Translator 3.3-dev documentation</a> &raquo;</li>
+          <li><a href="platforms.html" >Supported Platforms</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Peplin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

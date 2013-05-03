@@ -1,0 +1,209 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ford Prototype Vehicle Interface &mdash; OpenXC CAN Translator 3.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.3-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="OpenXC CAN Translator 3.3-dev documentation" href="../index.html" />
+    <link rel="up" title="Supported Platforms" href="platforms.html" />
+    <link rel="next" title="Digilent chipKIT Max32" href="max32.html" />
+    <link rel="prev" title="NGX Blueboard LPC1768-H" href="blueboard.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="max32.html" title="Digilent chipKIT Max32"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="blueboard.html" title="NGX Blueboard LPC1768-H"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">OpenXC CAN Translator 3.3-dev documentation</a> &raquo;</li>
+          <li><a href="platforms.html" accesskey="U">Supported Platforms</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ford-prototype-vehicle-interface">
+<h1>Ford Prototype Vehicle Interface<a class="headerlink" href="#ford-prototype-vehicle-interface" title="Permalink to this headline">¶</a></h1>
+<p>To build for the Ford prototype, compile with the flag <tt class="docutils literal"><span class="pre">PLATFORM=FORDBOARD</span></tt>.</p>
+<div class="section" id="flashing-a-pre-compiled-firmware">
+<h2>Flashing a Pre-compiled Firmware<a class="headerlink" href="#flashing-a-pre-compiled-firmware" title="Permalink to this headline">¶</a></h2>
+<p>Pre-compiled binaries (built with the <tt class="docutils literal"><span class="pre">BOOTLOADER</span></tt> flag enabled, see all
+<a class="reference external" href="compiling">compiler flags</a>) are compatible with the <a class="reference external" href="https://github.com/openxc/openlpc-USB_Bootloader">OpenLPC USB bootloader</a>  - follow the instructions
+for <a class="reference external" href="https://github.com/openxc/openlpc-USB_Bootloader#flashing-user-code">Flashing User Code</a> to
+update the vehicle interface.</p>
+</div>
+<div class="section" id="bootloader">
+<h2>Bootloader<a class="headerlink" href="#bootloader" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/openxc/openlpc-USB_Bootloader">OpenLPC USB bootloader</a>
+is tested and working, and enables the LPC17xx to appear as a USB drive. See the
+documentation in that repository for instructions on how to flash the bootloader
+(a JTAG programmer is required).</p>
+</div>
+<div class="section" id="compiling">
+<h2>Compiling<a class="headerlink" href="#compiling" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="usb-bootloader">
+<h3>USB Bootloader<a class="headerlink" href="#usb-bootloader" title="Permalink to this headline">¶</a></h3>
+<p>If you are running a <a class="reference internal" href="../installation/bootloaders.html"><em>supported bootloader</em></a>, you don&#8217;t need
+any special programming hardware. Compile the firmware to run under the
+bootloader:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>make clean
+<span class="nv">$ PLATFORM</span><span class="o">=</span>BLUEBOARD <span class="nv">BOOTLOADER</span><span class="o">=</span>1 make -j4
+</pre></div>
+</div>
+<p>The compiled firmware will be located at
+<tt class="docutils literal"><span class="pre">build/lpc17xx/cantranslator-lpc17xx.bin</span></tt>. See the <a class="reference external" href="/installation/bootloaders">bootloaders</a>
+page for instructions on how to load the firmware.</p>
+</div>
+<div class="section" id="bare-metal">
+<h3>Bare Metal<a class="headerlink" href="#bare-metal" title="Permalink to this headline">¶</a></h3>
+<p>Once the <a class="reference internal" href="../installation/installation.html"><em>dependencies</em></a> are installed, attach a
+JTAG adapter to your computer and the CAN translator, then compile and flash:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>make clean
+<span class="nv">$ PLATFORM</span><span class="o">=</span>BLUEBOARD make -j4
+<span class="nv">$ PLATFORM</span><span class="o">=</span>BLUEBOARD make flash
+</pre></div>
+</div>
+<p>The config files in this repository assume your JTAG adapter is the
+Olimex ARM-USB-OCD unit. If you have a different unit, modify the
+<tt class="docutils literal"><span class="pre">src/lpc17xx/lpc17xx.mk</span></tt> Makefile to load your programmer&#8217;s OpenOCD
+configuration.</p>
+</div>
+</div>
+<div class="section" id="uart">
+<h2>UART<a class="headerlink" href="#uart" title="Permalink to this headline">¶</a></h2>
+<p>On the LPC17xx, <tt class="docutils literal"><span class="pre">UART1</span></tt> is used for OpenXC output at the 230000 baud rate.
+Like on the chipKIT, hardware flow control (RTS/CTS) is enabled, so CTS must be
+pulled low by the receiving device before data will be sent.</p>
+<ul class="simple">
+<li>Pin 2.0 - <tt class="docutils literal"><span class="pre">UART1</span> <span class="pre">TX</span></tt>, connect this to the RX line of the receiver.</li>
+<li>Pin 2.1 - <tt class="docutils literal"><span class="pre">UART1</span> <span class="pre">RX</span></tt>, connect this to the TX line of the receiver.</li>
+<li>Pin 2.2 - <tt class="docutils literal"><span class="pre">UART1</span> <span class="pre">CTS</span></tt>, connect this to the RTS line of the receiver.</li>
+<li>Pin 2.7 - <tt class="docutils literal"><span class="pre">UART1</span> <span class="pre">RTS</span></tt>, connect this to the CTS line of the receiver.</li>
+</ul>
+</div>
+<div class="section" id="debug-logging">
+<h2>Debug Logging<a class="headerlink" href="#debug-logging" title="Permalink to this headline">¶</a></h2>
+<p>Logging will be on UART0, which is exposed on the bottom of the board at J3, a
+5-pin ISP connector.</p>
+</div>
+<div class="section" id="led-lights">
+<h2>LED Lights<a class="headerlink" href="#led-lights" title="Permalink to this headline">¶</a></h2>
+<p>The Ford prototype has 2 RGB LEDs.</p>
+<p><strong>LED A</strong></p>
+<ul class="simple">
+<li>CAN activity detected - Blue</li>
+<li>No CAN activity on either bus - Off</li>
+</ul>
+<p><strong>LED B</strong></p>
+<ul class="simple">
+<li>USB connected, Bluetooth not connected - Green</li>
+<li>Bluetooth connected, USB in either state - Blue</li>
+<li>Neither USB or Bluetooth connected - Off</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Ford Prototype Vehicle Interface</a><ul>
+<li><a class="reference internal" href="#flashing-a-pre-compiled-firmware">Flashing a Pre-compiled Firmware</a></li>
+<li><a class="reference internal" href="#bootloader">Bootloader</a></li>
+<li><a class="reference internal" href="#compiling">Compiling</a><ul>
+<li><a class="reference internal" href="#usb-bootloader">USB Bootloader</a></li>
+<li><a class="reference internal" href="#bare-metal">Bare Metal</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#uart">UART</a></li>
+<li><a class="reference internal" href="#debug-logging">Debug Logging</a></li>
+<li><a class="reference internal" href="#led-lights">LED Lights</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="blueboard.html"
+                        title="previous chapter">NGX Blueboard LPC1768-H</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="max32.html"
+                        title="next chapter">Digilent chipKIT Max32</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/platforms/ford.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="max32.html" title="Digilent chipKIT Max32"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="blueboard.html" title="NGX Blueboard LPC1768-H"
+             >previous</a> |</li>
+        <li><a href="../index.html">OpenXC CAN Translator 3.3-dev documentation</a> &raquo;</li>
+          <li><a href="platforms.html" >Supported Platforms</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Peplin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
